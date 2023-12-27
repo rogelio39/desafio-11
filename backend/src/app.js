@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import express from "express";
+import express, { json } from "express";
 import mongoose from "mongoose";
 import cookieParser from 'cookie-parser';
 import passport from 'passport';
@@ -11,15 +11,16 @@ import cors from 'cors';
 import router from './routes/index.routes.js';
 import compression from 'express-compression'
 import { addLogger } from './config/logger.js';
-
-
-
+import swaggerJSDoc from  'swagger-jsdoc';
+import swaggerUiExpress from 'swagger-ui-express';
+import {swaggerOptions} from './config/swagger.js';
 
 
 const PORT = 4000;
 
 const app = express();
 
+const specs = swaggerJSDoc(swaggerOptions);
 
 const whiteList = ['http://192.168.100.3:5173']
 
@@ -73,7 +74,10 @@ mongoose.connect(process.env.MONGO_URL)
 
 
 app.use(compression());
+//generacion de loggers
 app.use(addLogger);
+//swagger
+app.use('/apidocs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
 
 //db routes
 app.use('/', router);
@@ -84,6 +88,7 @@ app.use('/', router);
 app.listen(PORT, () => {
     console.log(`server on PORT ${PORT}`)
 })
+
 
 
 
