@@ -52,7 +52,7 @@ paths:
       tags:
         - Users
       parameters:
-        - name: id
+        - name:  id
           in: path
           required: true
           schema:
@@ -135,7 +135,7 @@ components:
       type: object
       properties: 
         _id:
-          type: object
+          type: objectId
           description: Id autogenerado por mongoDb
         first_name:
           type: string
@@ -148,10 +148,10 @@ components:
           description: Email del usuario
         password:
           type: string
-          description: password del usuario
+          description: Password del usuario
       example:
-        _id: ObjectId('32123123')
+        _id: objectId('32123123')
         first_name: Ana
         last_name: Alvarez
         email: ana@gmail.com
-        password: asdhsajdhasjk21
+        password: asdhsajdhasjk21 
