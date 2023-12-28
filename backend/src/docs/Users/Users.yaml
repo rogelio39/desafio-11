@@ -52,11 +52,11 @@ paths:
       tags:
         - Users
       parameters:
-        - name:  id
+        - name: id
           in: path
           required: true
           schema:
-            type: string
+            $type: String
           description: ID del usuario a buscar
       responses:
         '200':
@@ -73,6 +73,12 @@ paths:
       tags:
         - Users
       parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            $type: String
+          description: Usuario actualizado correctamente  
         - name: body
           in: body
           required: true
@@ -103,20 +109,12 @@ paths:
       tags:
         - Users
       parameters:
-        - name: body
-          in: body
+        - name: id
+          in: path
           required: true
           schema:
-            type: object
-            properties:
-              first_name:
-                type: string
-              last_name:
-                type: string
-              email:
-                type: string
-              password:
-                type: string
+            $type: String
+          description: Usuario actualizado correctamente  
       responses:
         '201':
           description: Usuario eliminado correctamente
