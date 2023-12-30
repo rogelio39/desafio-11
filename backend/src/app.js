@@ -83,7 +83,9 @@ app.use('/apidocs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
 app.use('/', router);
 
 
-
+app.get('testArtillery', (req, res) => {
+    res.send('hola desde Artillery');
+})
 
 app.listen(PORT, () => {
     console.log(`server on PORT ${PORT}`)
