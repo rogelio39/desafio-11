@@ -11,9 +11,9 @@ import cors from 'cors';
 import router from './routes/index.routes.js';
 import compression from 'express-compression'
 import { addLogger } from './config/logger.js';
-import swaggerJSDoc from  'swagger-jsdoc';
+import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUiExpress from 'swagger-ui-express';
-import {swaggerOptions} from './config/swagger.js';
+import { swaggerOptions } from './config/swagger.js';
 
 
 const PORT = 4000;
@@ -83,14 +83,17 @@ app.use('/apidocs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
 app.use('/', router);
 
 
-app.get('testArtillery', (req, res) => {
-    res.send('hola desde Artillery');
+app.get('/testArtillery', (req, res) => {
+    let sum = 0;
+    for (let i = 0; i < 5e8; i++) {
+        sum += i
+    }
+    res.send({ sum });
 })
 
 app.listen(PORT, () => {
     console.log(`server on PORT ${PORT}`)
 })
-
 
 
 

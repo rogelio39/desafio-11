@@ -8,3 +8,5 @@ scenarios:
   - flow:
     - get:
         url: '/'
+        headers:
+          authorization: 'aqui copiamos un token de jwt'
