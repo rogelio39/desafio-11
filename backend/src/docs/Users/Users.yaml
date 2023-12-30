@@ -78,7 +78,7 @@ paths:
           required: true
           schema:
             $type: String
-          description: Usuario actualizado correctamente  
+          description: Id del usuario a actualizar
         - name: body
           in: body
           required: true
@@ -152,4 +152,11 @@ components:
         first_name: Ana
         last_name: Alvarez
         email: ana@gmail.com
-        password: asdhsajdhasjk21 
+        password: asdhsajdhasjk21
+  
+
+
+
+
+
+      

@@ -1,55 +1,69 @@
 import winston from 'winston';
+import 'dotenv/config';
 
-const customLevelOpt = {
-    levels: {
-        fatal: 0,
-        error: 1,
-        warning: 2,
-        info: 3,
-        debug: 4
-    },
-    colors: {
-        fatal: 'red',
-        error: 'cyan',
-        info: 'blue',
-        debug: 'grey'
+let customLevelOpt;
+
+if (process.env.MODO == 'DEVELOPMENT') {
+    customLevelOpt = {
+        levels: {
+            fatal: 0,
+            error: 1,
+            warning: 2,
+            info: 3,
+            debug: 4
+        },
+        colors: {
+            fatal: 'red',
+            error: 'cyan',
+            warning: 'yellow',
+            info: 'blue',
+            debug: 'grey'
+        }
+    }
+} else {
+    customLevelOpt = {
+        levels: {
+            fatal: 0,
+            error: 1,
+            warning: 2,
+            info: 3
+        },
+        colors: {
+            fatal: 'red',
+            error: 'cyan',
+            warning: 'yellow',
+            info: 'blue'
+        }
     }
 }
 
-//creacion de los loggers de winston, en base al objeto ya creado
-const logger = winston.createLogger({
-    levels: customLevelOpt.levels,
     //podemos generar el guardado implementando cada uno de ellos y guardarlos de forma independiente.
-    transports: [
+    const transports = [
         new winston.transports.File({
-            filename: './errors.log',
+            filename: './errors_fatal.log',
             level: 'fatal',
             format: winston.format.combine(
-                winston.format.colorize({ colors: customLevelOpt.colors }),
                 winston.format.simple()
             )
         }),
         new winston.transports.File({
-            filename: './errors.log',
+            filename: './errors_errors.log',
             level: 'error',
             format: winston.format.combine(
-                winston.format.colorize({ colors: customLevelOpt.colors }),
                 winston.format.simple()
             )
         }),
         new winston.transports.File({
-            filename: './loggers.log',
+            filename: './loggers_warning.log',
             level: 'warning',
             format: winston.format.combine(
-                winston.format.colorize({ colors: customLevelOpt.colors }),
                 winston.format.simple()
             )
-        }),
+        }), 
         new winston.transports.File({
-            filename: './loggers.log',
+            filename: './loggers_info.log',
             level: 'info',
             format: winston.format.combine(
-                winston.format.colorize({ colors: customLevelOpt.colors }),
                 winston.format.simple()
             )
         }),
@@ -60,14 +74,22 @@ const logger = winston.createLogger({
                 winston.format.simple()
             )
         })
-    ]
-})
+    ];
+
+    //creacion de los loggers de winston, en base al objeto ya creado
+const logger = winston.createLogger({
+    levels: customLevelOpt.levels,
+    transports
+});
 
 export const addLogger = (req, res, next) => {
     if (!req.logger) {
         req.logger = logger;
         //aqui devuelvo quien hizo la peticion
-        req.logger.debug(`${req.method} es ${req.url} - ${new Date().toLocaleDateString()}`);
+        if (process.env.MODO == "DEVELOPMENT") {
+            req.logger.debug(`${req.method} es ${req.url} - ${new Date().toLocaleDateString()}`);
+        }
     }
     next();
 }
+
