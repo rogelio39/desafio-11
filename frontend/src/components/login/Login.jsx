@@ -20,18 +20,18 @@ const Login = () => {
             body: JSON.stringify(data)
         })
 
-
-        if (response.status == 200) {
-            const datos = await response.json();
-            document.cookie = `jwtCookie=${datos.token}; expires=${new Date(Date.now() + 1 * 24 * 60 * 60 * 1000).toUTCString()}; path=/;`;
-            navigate('/products')
-        } else if (response.status === 401) {
-            const datos = await response.json();
-            console.log(datos);
-            console.error('Credenciales incorrectas. Por favor, verifica tu email y contraseña.', response);
-        } else {
-            const datos = await response.json()
-            console.log("RESPONSE", datos)
+        try {
+            if (response.status == 200) {
+                const datos = await response.json();
+                document.cookie = `jwtCookie=${datos.token}; expires=${new Date(Date.now() + 1 * 24 * 60 * 60 * 1000).toUTCString()}; path=/;`;
+                navigate('/products')
+            } else{
+                const datos = await response.json();
+                console.log(datos);
+                console.error('Credenciales incorrectas. Por favor, verifica tu email y contraseña.', response);
+            } 
+        } catch (error) {
+            console.error('error al procesar respuesta del servidor: ', error)
         }
     }
 

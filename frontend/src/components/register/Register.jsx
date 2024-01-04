@@ -18,22 +18,26 @@ const Register = () => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body : JSON.stringify(data)
+                body: JSON.stringify(data)
                 // body: JSON.stringify({ first_name, last_name, age, email, password })
             })
 
-            if (response.status == 200) {
-                console.log("usuario registrado con exito");
-                navigate('/login')
-            } else if (response.status === 401) {
-                console.error('Error al registrarse', response);
-            } else {
-                console.log(response)
-            }
-        } catch (error) {
-            console.log('error al registrarse', error);
-        }
 
+            if (response.ok) {
+                try {
+                    const datos = await response.json();
+                    console.log('Usuario registrado con éxito:', datos);
+                    navigate('/login');
+                } catch (error) {
+                    console.error('Error al procesar la respuesta como JSON:', error);
+                }
+            } else  {
+                const errorData = await response.text();
+                console.error('Error al registrar usuario:', errorData);
+            } 
+        } catch (error) {
+            console.error("error al procesar solicitud: ", error)
+        }
     }
 
     return (

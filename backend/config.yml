@@ -1,0 +1,15 @@
+config:
+	plugins:
+		metrics-by-endpoint: {}
+	target: 'http://localhost:4000'
+	phases:
+		- duration: 20
+			arrivalRate: 10
+	environments:
+    default:
+      target: 'http://localhost:4000'
+
+scenarios:
+  - flow:
+    - get:
+        url: '/'

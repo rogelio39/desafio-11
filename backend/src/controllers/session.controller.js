@@ -33,7 +33,7 @@ export const register = async (req, res) => {
         if (!req.user) {
             res.status(400).send({ message: 'existing user' })
         } else {
-            res.status(200).send({ mensaje: 'User created' });
+            res.status(200).send({ mensaje: 'User created' });  
         }
     } catch (error) {
         res.status(500).send({ message: `Error register ${error}` });
@@ -54,12 +54,12 @@ export const current = async (req, res) => {
 }
 export const logout = async (req, res) => {
     try {
-        //si manejo sesiones en base de datos va esto
-        // if (req.session.user) {
-        //     req.session.destroy();
-        // } sino, va esto:
-        // res.clearCookie('jwtCookie');
-        // window.localStorage.removeItem('jwtCookie');
+        // si manejo sesiones en base de datos va esto
+        if (req.session.user) {
+            req.session.destroy();
+        } 
+        // sino, va esto:
+        res.clearCookie('jwtCookie');
         res.status(200).send({ resultado: 'usuario deslogueado' })
     } catch (error) {
         res.status(400).send({ error: `error en logout ${error}` });

@@ -14,6 +14,8 @@ import { addLogger } from './config/logger.js';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUiExpress from 'swagger-ui-express';
 import { swaggerOptions } from './config/swagger.js';
+import cluster from 'cluster';
+import { cpus } from 'os';
 
 
 const PORT = 4000;
@@ -22,7 +24,9 @@ const app = express();
 
 const specs = swaggerJSDoc(swaggerOptions);
 
-const whiteList = ['http://192.168.1.13:5173']
+const whiteList = ['http://localhost:5173'];
+
+const numeroDeProcesadores = cpus().length;
 
 
 const corsOptions = {
@@ -72,7 +76,6 @@ mongoose.connect(process.env.MONGO_URL)
     }).catch(() => console.log('error en conexion a DB'));
 
 
-
 app.use(compression());
 //generacion de loggers
 app.use(addLogger);
@@ -91,14 +94,36 @@ app.get('/testArtillery', (req, res) => {
     res.send({ sum });
 })
 
-app.listen(PORT, () => {
-    console.log(`server on PORT ${PORT}`)
-})
 
+if (cluster.isPrimary) {
+    console.log('proceso primario, generando proceso trabajador: Numero 1');
+    for (let i = 0; i < numeroDeProcesadores; i++) {
+        cluster.fork();
+        console.log(`Proceso forkeado, soy un worker ${i} `);
+    }
+} else {
+    console.log(`worker con el id: ${process.pid}`);
 
+    app.get('/operacionSencilla', (req, res) => {
+        let sum = 0;
+        for (let i = 0; i < 10000; i++) {
+            sum += i;
+        }
+        res.send({ status: 'success', message: `El worker ${process.pid} ha atendido esta peticion, el resultado es ${sum}` });
+    });
 
+    app.get('/operacionCompleja', (req, res) => {
+        let sum = 0;
+        for (let i = 0; i < 5e8; i++) {
+            sum += i;
+        }
+        res.send({ status: "success", message: `El worker ${process.pid} ha atendido esta peticion compleja, el resultado es ${sum}` });
+    })
 
-
+    app.listen(PORT, () => {
+        console.log(`listening on port ${PORT}`)
+    })
+}
 
 
 

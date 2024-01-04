@@ -13,7 +13,4 @@ let transporter = nodemailer.createTransport({
     debug: true,
 })
 
-
 export default transporter;
-
-

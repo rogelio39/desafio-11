@@ -21,7 +21,7 @@ const initializePassport = () => {
         if (req.cookies.jwtCookie) {
             const token = req.cookies.jwtCookie ? req.cookies.jwtCookie : {};
             return token;
-        } 
+        }
         const token = req.headers.authorization ? req.headers.authorization : {};
         return token;
     }
@@ -48,7 +48,7 @@ const initializePassport = () => {
 
                 //caso de error
                 if (user) {
-                    return done(null, false);
+                    return done(null, false, { message: 'Usuario ya registrado' });
                 }
                 //crear usuario
                 const passwordHash = createHash(password);
@@ -92,9 +92,9 @@ const initializePassport = () => {
         callbackURL: process.env.CALLBACK_URL
     }, async (accessToken, refreshToken, profile, done) => {
         try {
-            // console.log(accessToken)
-            // console.log(refreshToken)
-            // console.log(profile._json)
+            console.log(accessToken)
+            console.log(refreshToken)
+            console.log(profile._json)
 
             const user = await userModel.findOne({ email: profile._json.email })
             if (user) {

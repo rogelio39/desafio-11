@@ -18,4 +18,3 @@ sessionRouter.get('/logout', logout);
 export default sessionRouter;
 
 
-

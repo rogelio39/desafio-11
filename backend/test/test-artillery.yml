@@ -1,5 +1,5 @@
 config:
-  target: 'http://localhost:4000/testArtillery'
+  target: 'http://localhost:4000/operacionCompleja'
   phases:
     - duration: 60
       arrivalRate: 5

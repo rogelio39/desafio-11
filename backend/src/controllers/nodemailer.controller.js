@@ -1,5 +1,6 @@
 import transporter from "../config/nodemailer.js";
 
+
 export const nodemailerSend = async (req, res) => {
     let resultado;
 
@@ -26,4 +27,32 @@ export const nodemailerSend = async (req, res) => {
         res.status(500).send({ error: "error al enviar mail" });
     }
 }
+
+
+
+export const sendRecoveryMail = (email, recoveryLink) => {
+
+    if(email){
+        const mailOptions = {
+            from: 'rogeliosuleta@gmail.com',
+            to: email,
+            subject: 'Link para restablecer su password',
+            text: `Haga click en el siguiente enlace para reestablecer su password: ${recoveryLink}`
+        }
+
+        
+    transporter.sendMail(mailOptions, (error, info) => {
+        if(error){
+            console.error(error);
+        }else{
+            console.log("Mail enviado correctamente");
+        }
+    })
+    } else {
+        console.log("debes ingresar una direccion de correo electronico");
+    }
+
+
+}
+
 

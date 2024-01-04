@@ -2,6 +2,7 @@ import './Products.css';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getCookiesByName } from '../../utils/formsUtils';
+import Logout from '../logout/Logout';
 
 const Products = () => {
     const [products, setProducts] = useState([]);
@@ -43,35 +44,10 @@ const Products = () => {
 
     }, []);
 
- 
 
-    const logout = async () => {
-        try {
-            const response = await fetch('http://localhost:4000/api/sessions/logout', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            })
-            if (response.status === 200) {
-                // Limpia el token del almacenamiento local
-                const data = await response.json();
-                console.log("datos", data);
-                navigate('/login');
-            } else {
-                console.error(`Error al desloguearse ${response.status}`);
-            }
-        } catch (error) {
-            console.error(`Error al desloguearse ${error}`);
-        }
+    const handleLogout = () => {
+        console.log("sesion cerrada")
     }
-
-
-
-
-
-
-
 
 
     return (
@@ -86,8 +62,7 @@ const Products = () => {
                     </div>
                 ))}
             </div>
-
-            <button id="logout" onClick={logout}>CERRAR SESION</button>
+            <Logout onLogout = {handleLogout}/>
         </div>
     )
 }
